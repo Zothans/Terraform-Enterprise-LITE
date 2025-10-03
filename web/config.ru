@@ -1,7 +1,13 @@
 require './app'
 require 'sidekiq/web'
+require 'rack/session'
 
-# Mount Sidekiq web interface
+# Add session middleware for CSRF protection
+use Rack::Session::Cookie, 
+    secret: ENV['SESSION_SECRET'] || 'your-secret-key-here-change-in-production',
+    same_site: true, 
+    max_age: 86400
+
 map '/sidekiq' do
   use Rack::Auth::Basic, "Protected Area" do |username, password|
     username == 'admin' && password == 'password'
@@ -9,7 +15,6 @@ map '/sidekiq' do
   run Sidekiq::Web
 end
 
-# Mount main app
 map '/' do
   run Sinatra::Application
 end
