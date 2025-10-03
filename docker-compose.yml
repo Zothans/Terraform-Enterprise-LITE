@@ -10,6 +10,7 @@ services:
     volumes:
       - ./terraform:/app/terraform
       - ./web/app.rb:/app/app.rb
+      - ./web/config.ru:/app/config.ru
       - ./workers:/app/workers
     env_file:
       - .env  # Reference the .env file
@@ -17,7 +18,7 @@ services:
       - REDIS_URL=redis://redis:6379
     ports:
       - "4567:4567"
-    command: ["ruby", "app.rb", "-o", "0.0.0.0"]
+    command: rackup config.ru -o 0.0.0.0 -p 4567
     depends_on:
       - redis
 

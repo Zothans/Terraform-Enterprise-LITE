@@ -1,7 +1,6 @@
 require "sinatra"
 require "sidekiq"
 require "sidekiq/api"
-require "sidekiq/web"
 
 # Add these lines at the top
 set :bind, '0.0.0.0'
@@ -12,11 +11,6 @@ require_relative "./workers/terraform_worker"
 
 Sidekiq.configure_client do |config|
   config.redis = { url: ENV["REDIS_URL"] }
-end
-
-# Mount Sidekiq web interface
-map '/sidekiq' do
-  run Sidekiq::Web
 end
 
 get "/" do
