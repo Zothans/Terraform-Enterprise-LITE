@@ -14,11 +14,13 @@ class TerraformWorker
     File.write(tfvars_path, "bucket_name = \"#{bucket_name}\"\n")
 
     Dir.chdir("/app/terraform") do
+      puts "[Job #{job_id}] Initializing Terraform..."
       unless system("terraform init -input=false")
         puts "[Job #{job_id}] ERROR: Terraform init failed"
         return
       end
       
+      puts "[Job #{job_id}] Applying Terraform configuration..."
       unless system("terraform apply -auto-approve -var-file=vars.tfvars")
         puts "[Job #{job_id}] ERROR: Terraform apply failed"
         return
@@ -27,4 +29,5 @@ class TerraformWorker
 
     puts "[Job #{job_id}] Successfully created bucket: #{bucket_name}"
   end
+end
 end

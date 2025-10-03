@@ -1,25 +1,28 @@
 require "sinatra"
 require "sidekiq"
 require "sidekiq/api"
-require_relative "./workers/terraform_worker"
+require "sidekiq/web"
 
+# Add these lines at the top
 set :bind, '0.0.0.0'
 set :port, 4567
 
 # Load the worker file
 require_relative "./workers/terraform_worker"
 
-
 Sidekiq.configure_client do |config|
   config.redis = { url: ENV["REDIS_URL"] }
 end
+
+# Sidekiq web interface
+use Sidekiq::Web
 
 get "/" do
   <<-HTML
     <!DOCTYPE html>
     <html>
     <head>
-        <title>Lite TFE Demo</title>
+        <title>Terraform Enterprise LITE</title>
         <style>
             body { font-family: Arial, sans-serif; margin: 40px; }
             form { margin: 20px 0; }
@@ -28,7 +31,7 @@ get "/" do
         </style>
     </head>
     <body>
-        <h1>Lite Terraform Enterprise Demo</h1>
+        <h1> Terraform Enterprise LITE</h1>
         <form action="/create_bucket" method="post">
             <input type="text" name="bucket_name" placeholder="Enter S3 bucket name" required>
             <button type="submit">Create S3 Bucket</button>
@@ -36,7 +39,7 @@ get "/" do
         
         <div class="jobs">
             <h3>Background Jobs</h3>
-            <p>Check docker logs to see job processing</p>
+            <p><a href="/sidekiq">View Sidekiq Dashboard</a></p>
         </div>
     </body>
     </html>
