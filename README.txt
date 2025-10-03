@@ -98,3 +98,12 @@ It’s a simplified simulation of Terraform Enterprise, not production-ready.
 docker-compose down
 docker-compose build --no-cache
 docker-compose up
+
+
+docker-compose config
+docker-compose down
+docker-compose up
+docker-compose build --no-cache
+docker-compose up --build
+docker-compose restart worker
+docker-compose logs worker -f

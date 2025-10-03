@@ -3,7 +3,6 @@ require "securerandom"
 
 class TerraformWorker
   include Sidekiq::Worker
-  sidekiq_options queue: "terraform"
 
   def perform(bucket_name)
     job_id = SecureRandom.uuid
@@ -29,5 +28,4 @@ class TerraformWorker
 
     puts "[Job #{job_id}] Successfully created bucket: #{bucket_name}"
   end
-end
 end
