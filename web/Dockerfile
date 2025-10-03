@@ -7,8 +7,8 @@ RUN unzip terraform_1.5.0_linux_amd64.zip && mv terraform /usr/local/bin/
 
 WORKDIR /app
 
-# Copy Gemfile first for better caching
-COPY Gemfile Gemfile.lock ./
+# Copy only Gemfile (remove Gemfile.lock)
+COPY Gemfile ./
 RUN bundle install
 
 # Create workers directory

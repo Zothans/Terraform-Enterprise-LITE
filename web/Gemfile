@@ -1,8 +1,7 @@
 source 'https://rubygems.org'
 
-gem 'sinatra'
-gem 'sidekiq'
-gem 'sidekiq-web'
-gem 'redis'
-gem 'puma'
-gem 'rackup'
+gem 'sinatra', '~> 2.2'
+gem 'sidekiq', '~> 6.5'
+gem 'redis', '~> 4.8'
+gem 'puma', '~> 5.6'
+gem 'rack', '~> 2.2'

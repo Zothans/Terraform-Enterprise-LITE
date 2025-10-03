@@ -14,15 +14,17 @@ Sidekiq.configure_client do |config|
   config.redis = { url: ENV["REDIS_URL"] }
 end
 
-# Sidekiq web interface
-use Sidekiq::Web
+# Mount Sidekiq web interface
+map '/sidekiq' do
+  run Sidekiq::Web
+end
 
 get "/" do
   <<-HTML
     <!DOCTYPE html>
     <html>
     <head>
-        <title>Terraform Enterprise LITE</title>
+        <title>Lite TFE Demo</title>
         <style>
             body { font-family: Arial, sans-serif; margin: 40px; }
             form { margin: 20px 0; }
@@ -31,7 +33,7 @@ get "/" do
         </style>
     </head>
     <body>
-        <h1> Terraform Enterprise LITE</h1>
+        <h1>Lite Terraform Enterprise Demo</h1>
         <form action="/create_bucket" method="post">
             <input type="text" name="bucket_name" placeholder="Enter S3 bucket name" required>
             <button type="submit">Create S3 Bucket</button>

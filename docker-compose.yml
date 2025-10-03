@@ -12,7 +12,7 @@ services:
       - ./web/app.rb:/app/app.rb
       - ./workers:/app/workers
     env_file:
-      - .env
+      - .env  # Reference the .env file
     environment:
       - REDIS_URL=redis://redis:6379
     ports:
@@ -21,17 +21,16 @@ services:
     depends_on:
       - redis
 
-worker:
-  build: ./web
-  command: bundle exec sidekiq -r ./workers/terraform_worker.rb -q terraform
-  volumes:
-    - ./terraform:/app/terraform
-    - ./workers:/app/workers
-  environment:
-    - REDIS_URL=redis://redis:6379
-    - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
-    - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
-    - AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION}
-  depends_on:
-    - redis
-    - web
+  worker:
+    build: ./web
+    command: bundle exec sidekiq -r ./workers/terraform_worker.rb -c 1 -v
+    volumes:
+      - ./terraform:/app/terraform
+      - ./workers:/app/workers
+    env_file:
+      - .env  # Reference the .env file
+    environment:
+      - REDIS_URL=redis://redis:6379
+    depends_on:
+      - redis
+      - web
