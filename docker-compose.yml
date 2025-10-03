@@ -17,6 +17,7 @@ services:
       - REDIS_URL=redis://redis:6379
     ports:
       - "4567:4567"
+    command: ruby app.rb -o 0.0.0.0
     depends_on:
       - redis
 
