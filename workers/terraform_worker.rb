@@ -9,14 +9,22 @@ class TerraformWorker
     job_id = SecureRandom.uuid
     puts "[Job #{job_id}] Creating bucket: #{bucket_name}"
 
-    tfvars_path = "/terraform/vars.tfvars"
+    # Use correct path inside container
+    tfvars_path = "/app/terraform/vars.tfvars"
     File.write(tfvars_path, "bucket_name = \"#{bucket_name}\"\n")
 
-    Dir.chdir("/terraform") do
-      system("terraform init -input=false")
-      system("terraform apply -auto-approve -var-file=vars.tfvars")
+    Dir.chdir("/app/terraform") do
+      unless system("terraform init -input=false")
+        puts "[Job #{job_id}] ERROR: Terraform init failed"
+        return
+      end
+      
+      unless system("terraform apply -auto-approve -var-file=vars.tfvars")
+        puts "[Job #{job_id}] ERROR: Terraform apply failed"
+        return
+      end
     end
 
-    puts "[Job #{job_id}] Completed bucket creation: #{bucket_name}"
+    puts "[Job #{job_id}] Successfully created bucket: #{bucket_name}"
   end
 end

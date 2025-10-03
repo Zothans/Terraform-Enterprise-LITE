@@ -4,20 +4,15 @@ services:
   redis:
     image: redis:7
     ports:
-      - "6379:6379"
-
-  redisinsight:
-    image: redis/redisinsight:latest
-    ports:
-      - "5540:5540"
-    depends_on:
-      - redis
+      - "6379:6379"  # Expose to host for local RedisInsight
+    command: redis-server --bind 0.0.0.0 --protected-mode no
 
   web:
     build: ./web
     volumes:
-      - ./terraform:/terraform
-      - ./workers:/workers
+      - ./terraform:/app/terraform
+      - ./web/app.rb:/app/app.rb
+      - ./workers:/app/workers
     environment:
       - REDIS_URL=redis://redis:6379
       - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
@@ -30,10 +25,10 @@ services:
 
   worker:
     build: ./web
-    command: bundle exec sidekiq -r ./../workers/terraform_worker.rb
+    command: bundle exec sidekiq -r ./workers/terraform_worker.rb
     volumes:
-      - ./terraform:/terraform
-      - ./workers:/workers
+      - ./terraform:/app/terraform
+      - ./workers:/app/workers
     environment:
       - REDIS_URL=redis://redis:6379
       - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
@@ -41,3 +36,4 @@ services:
       - AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION}
     depends_on:
       - redis
+      - web

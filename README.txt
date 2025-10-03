@@ -7,28 +7,37 @@ It provides a minimal UI with a button to create an S3 bucket. Clicking the butt
 You can also monitor the queued jobs using RedisInsight.
 
 Project Structure
-.
-├── web/                     # Sinatra app + Sidekiq workers
-│   ├── Gemfile              # Ruby gem dependencies
-│   ├── Gemfile.lock         # Locked versions (reproducibility)
-│   ├── app.rb               # Sinatra web UI
-│   ├── worker.rb            # Sidekiq job definition
-│   └── views/
-│       └── index.erb        # UI template with "Create S3 Bucket" button
-├── terraform/               # Terraform config to create S3 bucket
-│   └── main.tf
-├── docker-compose.yml       # Services (web, redis, sidekiq, redisinsight)
-└── README.md
 
+.
+├── docker-compose.yml
+├── README.txt
+├── terraform
+│   └── main.tf
+├── web
+│   ├── app.rb
+│   ├── Gemfile
+│   ├── Gemfile.lock (will be created)
+│   └── Dockerfile (NEW)
+└── workers
+    └── terraform_worker.rb
 
 🛠️ Requirements
 	•	AWS credentials available (via ~/.aws/credentials or env vars AWS_ACCESS_KEY_ID, AWS_SECRET_ACCESS_KEY).
 	•	Docker & Docker Compose installed.
 	•	Optional: RedisInsight to visualize jobs in Redis.
 
+🎯 What You'll Get:
+Web UI at http://localhost:4567 with a form to create S3 buckets
 
+Jobs queued in Redis
+
+Sidekiq processing jobs and running Terraform
+
+RedisInsight at http://localhost:8001 to monitor Redis
+
+
+--------------------------
  Quick Start
-
 
 Bring everything up:
 docker-compose up --build

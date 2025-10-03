@@ -9,16 +9,35 @@ end
 
 get "/" do
   <<-HTML
-    <h1>Lite TFE Demo</h1>
-    <form action="/create_bucket" method="post">
-      <input type="text" name="bucket_name" placeholder="Bucket Name" required>
-      <button type="submit">Create S3 Bucket</button>
-    </form>
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <title>Lite TFE Demo</title>
+        <style>
+            body { font-family: Arial, sans-serif; margin: 40px; }
+            form { margin: 20px 0; }
+            input, button { padding: 10px; margin: 5px; }
+            .jobs { margin-top: 30px; }
+        </style>
+    </head>
+    <body>
+        <h1>Lite Terraform Enterprise Demo</h1>
+        <form action="/create_bucket" method="post">
+            <input type="text" name="bucket_name" placeholder="Enter S3 bucket name" required>
+            <button type="submit">Create S3 Bucket</button>
+        </form>
+        
+        <div class="jobs">
+            <h3>Background Jobs</h3>
+            <p>Check docker logs to see job processing</p>
+        </div>
+    </body>
+    </html>
   HTML
 end
 
 post "/create_bucket" do
-  bucket = params["bucket_name"]
-  job_id = TerraformWorker.perform_async(bucket)
-  "Enqueued job #{job_id} to create bucket #{bucket}"
+  bucket_name = params["bucket_name"]
+  job_id = TerraformWorker.perform_async(bucket_name)
+  "Enqueued job #{job_id} to create bucket: #{bucket_name}<br><a href='/'>Back</a>"
 end
