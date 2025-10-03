@@ -8,10 +8,11 @@ RUN unzip terraform_1.5.0_linux_amd64.zip && mv terraform /usr/local/bin/
 WORKDIR /app
 
 # Copy Gemfile first for better caching
-COPY Gemfile ./
+COPY Gemfile Gemfile.lock ./
 RUN bundle install
 
 # Create workers directory
 RUN mkdir -p workers
 
-# The rest will be mounted via volumes in docker-compose
+# Default command
+CMD ["ruby", "app.rb", "-o", "0.0.0.0"]

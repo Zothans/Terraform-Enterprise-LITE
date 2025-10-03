@@ -52,7 +52,7 @@ Access the Web UI:
 	•	Logs are visible in the Sidekiq container output.
 
 1. Clone the repo:
-git clone https://github.com/your-username/lite-tfe-demo.git
+git clone https://github.com/zothsn/Terraform-Enterprise-LITE.git
 cd lite-tfe-demo
 
 2. Bring everything up:

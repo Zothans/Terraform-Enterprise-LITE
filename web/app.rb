@@ -1,11 +1,14 @@
 require "sinatra"
 require "sidekiq"
 require "sidekiq/api"
-require_relative "../workers/terraform_worker"
+require_relative "./workers/terraform_worker"
 
-# Add these lines at the top
 set :bind, '0.0.0.0'
 set :port, 4567
+
+# Load the worker file
+require_relative "./workers/terraform_worker"
+
 
 Sidekiq.configure_client do |config|
   config.redis = { url: ENV["REDIS_URL"] }
