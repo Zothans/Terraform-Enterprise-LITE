@@ -1,10 +1,8 @@
-version: "3.8"
-
 services:
   redis:
     image: redis:7
     ports:
-      - "6379:6379"  # Expose to host for local RedisInsight
+      - "6379:6379"
     command: redis-server --bind 0.0.0.0 --protected-mode no
 
   web:
@@ -13,11 +11,10 @@ services:
       - ./terraform:/app/terraform
       - ./web/app.rb:/app/app.rb
       - ./workers:/app/workers
+    env_file:
+      - .env
     environment:
       - REDIS_URL=redis://redis:6379
-      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
-      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
-      - AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION}
     ports:
       - "4567:4567"
     depends_on:
@@ -29,11 +26,10 @@ services:
     volumes:
       - ./terraform:/app/terraform
       - ./workers:/app/workers
+    env_file:
+      - .env
     environment:
       - REDIS_URL=redis://redis:6379
-      - AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}
-      - AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}
-      - AWS_DEFAULT_REGION=${AWS_DEFAULT_REGION}
     depends_on:
       - redis
       - web

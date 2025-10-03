@@ -1,0 +1,10 @@
+cd /home/ubuntu/Terraform-Enterprise-LITE/web
+
+# Install bundler if not already installed
+gem install bundler
+
+# Generate Gemfile.lock
+bundle install
+
+# Verify it was created
+ls -la
