@@ -2,9 +2,12 @@ require './app'
 require 'sidekiq/web'
 require 'rack/session'
 
+# Generate a secure session secret if not in environment
+session_secret = ENV['SESSION_SECRET'] || 'development-secret-key-change-in-production'
+
 # Add session middleware for CSRF protection
 use Rack::Session::Cookie, 
-    secret: ENV['SESSION_SECRET'] || 'your-secret-key-here-change-in-production',
+    secret: session_secret,
     same_site: true, 
     max_age: 86400
 
