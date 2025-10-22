@@ -27,15 +27,25 @@ get "/" do
         </style>
     </head>
     <body>
-        <h1>Lite Terraform Enterprise Demo</h1>
+        <h1>Mini Terraform Enterprise</h1>
         <form action="/create_bucket" method="post">
+            <input type="text" name="bucket_name" placeholder="Enter S3 bucket name" required>
+            <button type="submit">Create S3 Bucket</button>
+        </form>
+
+        <form action="/List available bucket" method="get">
+            <input type="text" name="bucket_name" placeholder="Enter S3 bucket name" required>
+            <button type="submit">Create S3 Bucket</button>
+        </form>
+
+        <form action="/Delete_bucket" method="post">
             <input type="text" name="bucket_name" placeholder="Enter S3 bucket name" required>
             <button type="submit">Create S3 Bucket</button>
         </form>
         
         <div class="jobs">
-            <h3>Background Jobs</h3>
-            <p><a href="/sidekiq">View Sidekiq Dashboard</a></p>
+            <h3>View Background Jobs below by accessing the Sidekiq Dashboard</h3>
+            <p><a href="/sidekiq">Click here to view Sidekiq Dashboard</a></p>
         </div>
     </body>
     </html>
