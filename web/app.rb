@@ -1,6 +1,7 @@
 require "sinatra"
 require "sidekiq"
 require "sidekiq/api"
+require "date"
 
 # Add these lines at the top
 set :bind, '0.0.0.0'
@@ -28,19 +29,20 @@ get "/" do
     </head>
     <body>
         <h1>Mini Terraform Enterprise</h1>
-        <form action="/create_bucket" method="post">
-            <input type="text" name="bucket_name" placeholder="Enter S3 bucket name" required>
-            <button type="submit">Create S3 Bucket</button>
-        </form>
 
         <form action="/List available bucket" method="get">
+            <input type="text" name="bucket_name" placeholder="Enter S3 bucket name" required>
+            <button type="submit">List S3 Buckets</button>
+        </form>
+        
+        <form action="/create_bucket" method="post">
             <input type="text" name="bucket_name" placeholder="Enter S3 bucket name" required>
             <button type="submit">Create S3 Bucket</button>
         </form>
 
         <form action="/Delete_bucket" method="post">
             <input type="text" name="bucket_name" placeholder="Enter S3 bucket name" required>
-            <button type="submit">Create S3 Bucket</button>
+            <button type="submit">Delete S3 Bucket</button>
         </form>
         
         <div class="jobs">
